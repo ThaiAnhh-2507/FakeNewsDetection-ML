@@ -1,0 +1,15 @@
+{
+  "raw_rows": 44898,
+  "raw_fake": 23481,
+  "raw_real": 21417,
+  "removed_short": 1513,
+  "removed_short_fake": 1475,
+  "removed_conflicting_label": 0,
+  "removed_duplicates": 5677,
+  "train_rows": 26395,
+  "train_fake": 11792,
+  "val_rows": 5656,
+  "val_fake": 2527,
+  "test_rows": 5657,
+  "test_fake": 2527
+}

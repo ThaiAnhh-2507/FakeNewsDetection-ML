@@ -1,0 +1,37 @@
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Raw and external datasets
+data/raw/*.csv
+data/external/*.csv
+
+# Generated dataset splits
+data/processed/train.csv
+data/processed/val.csv
+data/processed/test.csv
+
+# External evaluation outputs
+data/external/eval_results/
+data/external/eval_results_sample_10000/
+
+# Trained models
+models/baseline/
+models/lstm/
+models/bert/
+
+# Temporary files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

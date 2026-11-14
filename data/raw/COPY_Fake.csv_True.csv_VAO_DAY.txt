@@ -1,0 +1,1 @@
+Copy Fake.csv va True.csv (bo ISOT) vao thu muc nay.
