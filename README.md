@@ -95,11 +95,22 @@ python -c "import transformers; print(transformers.__version__)"
 
 ## 4. Chuẩn bị dữ liệu
 
-Dataset không được lưu trong GitHub vì dung lượng lớn. Mỗi thành viên cần tải dữ liệu riêng hoặc nhận file từ nhóm.
+Dataset không được lưu trong GitHub vì dung lượng lớn. Mỗi thành viên tải dữ liệu từ các nguồn dưới đây rồi đặt đúng thư mục.
+
+### Link tải dataset
+
+| Dataset | Mục đích | Link tải |
+|---|---|---|
+| ISOT Fake News Dataset | Bắt buộc để chuẩn bị dữ liệu và huấn luyện các model | [Tải trực tiếp file ZIP từ ISOT Research Lab](https://onlineacademiccommunity.uvic.ca/isot/wp-content/uploads/sites/7295/2023/03/News-_dataset.zip) |
+| ISOT Dataset Description | Tài liệu mô tả chính thức | [Xem tài liệu PDF](https://onlineacademiccommunity.uvic.ca/isot/wp-content/uploads/sites/7295/2023/02/ISOT_Fake_News_Dataset_ReadMe.pdf) |
+| WELFake Dataset | Không bắt buộc, chỉ dùng cho đánh giá external | [Mở trang tải WELFake trên Zenodo](https://zenodo.org/records/4561253) |
+| WELFake CSV | Tải trực tiếp file CSV, dung lượng khoảng 245 MB | [Tải trực tiếp WELFake_Dataset.csv](https://zenodo.org/api/records/4561253/files/WELFake_Dataset.csv/content) |
+
+> Nếu link tải trực tiếp ISOT không hoạt động, mở [trang dataset chính thức của ISOT Research Lab](https://onlineacademiccommunity.uvic.ca/isot/2022/11/27/fake-news-detection-datasets/) rồi chọn **Click here to download the ISOT Fake News Dataset**.
 
 ### 4.1. ISOT Fake News Dataset
 
-Cần hai file:
+Sau khi tải và giải nén file ZIP, lấy hai file:
 
 ```text
 data/raw/Fake.csv
