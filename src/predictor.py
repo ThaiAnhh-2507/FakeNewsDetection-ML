@@ -12,6 +12,7 @@ from text_utils import build_input
 MODEL_INFO = {
     "logistic": "Logistic Regression (TF-IDF)",
     "svc": "Linear SVC (TF-IDF)",
+    "multinomial_nb": "Multinomial Naive Bayes (TF-IDF)",
     "lstm": "BiLSTM",
     "bert": "DistilBERT",
 }
@@ -27,6 +28,7 @@ class Predictor:
         return {
             "logistic": [d / "baseline" / "tfidf.joblib", d / "baseline" / "logistic.joblib"],
             "svc": [d / "baseline" / "tfidf.joblib", d / "baseline" / "svc.joblib"],
+            "multinomial_nb": [d / "baseline" / "multinomial_nb.joblib"],
             "lstm": [d / "lstm" / "lstm.pt", d / "lstm" / "vocab.json"],
             "bert": [d / "bert" / "config.json", d / "bert" / "app_config.json"],
         }[key]
@@ -42,6 +44,9 @@ class Predictor:
             if "_tfidf" not in self._cache:
                 self._cache["_tfidf"] = joblib.load(self.dir / "baseline" / "tfidf.joblib")
             obj = (self._cache["_tfidf"], joblib.load(self.dir / "baseline" / f"{key}.joblib"))
+        elif key == "multinomial_nb":
+            import joblib
+            obj = joblib.load(self._required_files(key)[0])
         elif key == "lstm":
             import torch
             from lstm_model import LSTMClassifier
@@ -78,6 +83,9 @@ class Predictor:
             vec, clf = obj
             score = float(clf.decision_function(vec.transform([text]))[0])
             p_fake = 1.0 / (1.0 + math.exp(-max(-30.0, min(30.0, score))))  # ước lượng, không hiệu chuẩn
+        elif key == "multinomial_nb":
+            fake_index = list(obj.classes_).index(1)
+            p_fake = float(obj.predict_proba([text])[0][fake_index])
         elif key == "lstm":
             import torch
             from lstm_model import encode
