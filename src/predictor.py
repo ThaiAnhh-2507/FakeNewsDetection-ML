@@ -10,6 +10,7 @@ from common import MODELS_DIR
 from text_utils import build_input
 
 MODEL_INFO = {
+    "decision_tree": "Decision Tree (TF-IDF)",
     "logistic": "Logistic Regression (TF-IDF)",
     "svc": "Linear SVC (TF-IDF)",
     "lstm": "BiLSTM",
@@ -25,6 +26,7 @@ class Predictor:
     def _required_files(self, key: str) -> list:
         d = self.dir
         return {
+            "decision_tree": [d / "baseline" / "decision_tree.joblib"],
             "logistic": [d / "baseline" / "tfidf.joblib", d / "baseline" / "logistic.joblib"],
             "svc": [d / "baseline" / "tfidf.joblib", d / "baseline" / "svc.joblib"],
             "lstm": [d / "lstm" / "lstm.pt", d / "lstm" / "vocab.json"],
@@ -37,7 +39,10 @@ class Predictor:
     def _load(self, key: str):
         if key in self._cache:
             return self._cache[key]
-        if key in ("logistic", "svc"):
+        if key == "decision_tree":
+            import joblib
+            obj = joblib.load(self._required_files(key)[0])
+        elif key in ("logistic", "svc"):
             import joblib
             if "_tfidf" not in self._cache:
                 self._cache["_tfidf"] = joblib.load(self.dir / "baseline" / "tfidf.joblib")
@@ -71,7 +76,10 @@ class Predictor:
         obj = self._load(key)  # thời gian nạp model không tính vào ms
         t0 = time.perf_counter()
 
-        if key == "logistic":
+        if key == "decision_tree":
+            fake_index = list(obj.classes_).index(1)
+            p_fake = float(obj.predict_proba([text])[0][fake_index])
+        elif key == "logistic":
             vec, clf = obj
             p_fake = float(clf.predict_proba(vec.transform([text]))[0][1])
         elif key == "svc":
@@ -94,10 +102,12 @@ class Predictor:
 
         ms = (time.perf_counter() - t0) * 1000
         p_fake = min(max(p_fake, 0.0), 1.0)
+        # DecisionTreeClassifier.predict selects REAL (class 0) on a probability tie.
+        is_fake = p_fake > 0.5 if key == "decision_tree" else p_fake >= 0.5
         return {
             "model": key,
             "name": MODEL_INFO[key],
-            "label": "FAKE" if p_fake >= 0.5 else "REAL",
+            "label": "FAKE" if is_fake else "REAL",
             "fake_prob": p_fake,
             "real_prob": 1.0 - p_fake,
             "confidence": max(p_fake, 1.0 - p_fake),
