@@ -244,7 +244,8 @@ with predict_tab:
                 c3.metric("Dự đoán FAKE", labels.count("FAKE"))
 
                 cols = st.columns(min(len(results), 4))
-                for col, (key, item) in zip(cols, results.items()):
+                for index, (key, item) in enumerate(results.items()):
+                    col = cols[index % len(cols)]
                     score = test_f1(key, metrics)
                     badge = '<span class="pill best">★ Test tốt nhất</span>' if key == best_key and score is not None else ""
                     pill_class = "pill-real" if item["label"] == "REAL" else "pill-fake"
